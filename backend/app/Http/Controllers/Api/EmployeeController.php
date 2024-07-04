@@ -3,6 +3,7 @@
 namespace App\Http\Controllers\Api;
 
 use App\Http\Controllers\Controller;
+use App\Http\Resources\EmployeeResource;
 use App\Services\EmployeeService;
 use http\Env\Response;
 use Illuminate\Http\JsonResponse;
@@ -19,6 +20,10 @@ class EmployeeController extends Controller
         $data = $request->validate([
             'id' => 'integer|exists:employees,id',
         ]);
-        return response()->json($this->employeeService->getEmployeeListByChief(count($data) > 0 ? $data['id'] : null));
+        return response()->json(
+            EmployeeResource::collection(
+                $this->employeeService->getEmployeeListByChief(count($data) > 0 ? $data['id'] : null)
+            )
+        );
     }
 }

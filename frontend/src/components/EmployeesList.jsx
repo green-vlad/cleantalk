@@ -22,6 +22,12 @@ export default function EmployeesList() {
   }, []);
 
   return (
-    <div>Hello1</div>
+    <div>
+      <ul>
+        {employeesList && employeesList.map((employee, index) => {
+          <li>{{ employee }}</li>
+        })}
+      </ul>
+    </div>
   );
 }
