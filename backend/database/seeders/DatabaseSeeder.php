@@ -13,11 +13,12 @@ class DatabaseSeeder extends Seeder
     public function run(): void
     {
         // User::factory(10)->create();
-        $tops = Employee::factory()->count(10)->state(['position' => 'top'])->create();
+        $tops = Employee::factory()->count(10)->state(['position' => 'top', 'is_chief' => true])->create();
         $subtops = [];
         foreach ($tops as $top) {
             $subtops = array_merge($subtops, Employee::factory()->count(10)->state([
                 'position' => 'subtop',
+                'is_chief' => true,
                 'ref_chief_id' => $top->getKey(),
             ])->create()->toArray());
         }

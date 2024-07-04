@@ -23,6 +23,7 @@ class EmployeeResource extends JsonResource
             'email' => $this->email,
             'phone' => $this->phone,
             'notes' => $this->notes,
+            'isChief' => $this->is_chief,
         ];
     }
 }

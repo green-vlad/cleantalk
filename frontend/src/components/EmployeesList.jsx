@@ -1,31 +1,50 @@
 import axiosClient from "../services/axios-client";
 import {useEffect, useState} from "react";
+import "./EmployeesList.css"
 
-function getEmployeesListByChief(id) {
-  let uri = id ? '/?id=' + id : '/';
-  console.log(uri);
-  axiosClient.get(uri)
-    .then(response => {
-      console.log(response);
-      return response.data;
-    })
-    .catch(error => {
-      console.error(error.message);
-    })
-}
-export default function EmployeesList() {
-  const [ employeesList, setEmployeesList ] = useState(null);
+export default function EmployeesList(props) {
+  const [ employeesList, setEmployeesList ] = useState([]);
+
+  function getEmployeesListByChief(id, chief) {
+    let uri = id ? '/?id=' + id : '/';
+    axiosClient.get(uri)
+      .then(response => {
+        const _employeesList = response.data.map((employee) => {
+          return { subordinates: null, isExpaned: false, ...employee }
+        });
+        if (chief) {
+          chief.subordinates = _employeesList;
+        }
+        // chief.subordinates = _employeesList;
+        console.log(chief);
+        setEmployeesList(_employeesList);
+      })
+      .catch(error => {
+        console.error(error.message);
+      })
+  }
+
+  function handleClick(id, chief) {
+    console.log(chief);
+    getEmployeesListByChief(id, chief);
+    return (
+      <EmployeesList id={id} />
+    );
+  }
 
   useEffect(() => {
-    setEmployeesList(getEmployeesListByChief());
-    console.log(employeesList);
+    getEmployeesListByChief(props.id);
   }, []);
 
   return (
     <div>
       <ul>
         {employeesList && employeesList.map((employee, index) => {
-          <li>{{ employee }}</li>
+          return (
+            <li key={ index } className="employee" onClick={ () => handleClick(employee.id, employee) }>
+              #{employee.id} { employee.firstName + ' ' + employee.lastName }
+            </li>
+          )
         })}
       </ul>
     </div>

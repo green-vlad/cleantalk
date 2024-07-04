@@ -1,5 +1,4 @@
 import axios from "axios";
-import * as response from "autoprefixer";
 
 const axiosClient = axios.create({
   baseURL: 'http://localhost:8888/api',
