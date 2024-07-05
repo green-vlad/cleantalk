@@ -26,4 +26,18 @@ class EmployeeController extends Controller
             )
         );
     }
+
+    public function save(Request $request): JsonResponse
+    {
+        $data = $request->validate([
+            'id' => 'required|integer|exists:employees,id',
+            'firstName' => 'required|string',
+            'lastName' => 'required|string',
+            'position' => 'required|string',
+            'email' => 'required|email|string',
+            'phone' => 'required|string',
+        ]);
+        $this->employeeService->save($data);
+        return response()->json('', 204);
+    }
 }

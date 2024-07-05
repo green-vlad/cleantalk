@@ -10,3 +10,4 @@ Route::get('/user', function (Request $request) {
 })->middleware('auth:sanctum');
 
 Route::get('/', [EmployeeController::class, 'index'])->middleware(ApiCors::class);
+Route::post('/save', [EmployeeController::class, 'save'])->middleware(ApiCors::class);

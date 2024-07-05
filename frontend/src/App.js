@@ -1,9 +1,9 @@
 import './App.css';
-import EmployeesList from "./components/EmployeesList"
+import EmployeeTree from "./components/EmployeeTree"
 
 function App() {
   return (
-    <EmployeesList />
+    <EmployeeTree />
   );
 }
 
