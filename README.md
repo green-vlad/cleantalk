@@ -14,3 +14,11 @@
 ./artisan migrate`
 8. Запускаем сидирование
 `./artisan db:seed`
+API запускается на порту 8888, если нужно поменять, то это можно сделать `backend/docker-compose.yml:6`
+
+## Frontend
+1. cd frontend
+2. npm install
+Если бэк запустили на порту отличном от 8888, то в `frontend/src/services/axios-client.jsx:4` 
+надо указать соответствующий.
+2. npm start
