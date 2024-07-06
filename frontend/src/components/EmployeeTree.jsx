@@ -6,51 +6,93 @@ import { TbMail } from "react-icons/tb";
 import { TbUserEdit } from "react-icons/tb";
 import { TbUserMinus } from "react-icons/tb";
 
-function EditWindow({ employee }) {
-  const [ isVisible, setIsVisible ] = useState(false);
+function EditWindow({ employee, closeWindow }) {
 
-  function handleSubmit(e, employee) {
-    const [ empl, setEmpl ] = useState(employee);
+  function handleSubmit(e) {
     e.preventDefault();
     const formData = new FormData(e.target);
     const payload = Object.fromEntries(formData);
     axiosClient.post('/save', payload)
       .then(response => {
-
+        window.location.reload();
       })
+      .catch(error => {
+        console.error(error.message);
+      });
+  }
+
+  function _closeWindow(e) {
+    e.preventDefault();
+    closeWindow();
   }
 
   return (
-    <div className="edit-window">
-      <form onSubmit={ (e) => handleSubmit(e, employee) }>
-        <input name="id" type="hidden" value={employee.id} />
-        <input name="firstName" type="text" placeholder="First name" defaultValue={employee.firstName}/>
-        <input name="lastName" type="text" placeholder="Last name" defaultValue={employee.lastName}/>
-        <input name="email" type="email" placeholder="Email" defaultValue={employee.email}/>
-        <input name="phone" type="text" placeholder="Phone" defaultValue={employee.phone}/>
-        <input name="position" type="text" placeholder="position" defaultValue={employee.position}/>
+    <form onSubmit={(e) => handleSubmit(e, employee)}>
+      <div className="edit-window" onMouseLeave={ (e) => _closeWindow(e) }>
+        <input name="id" type="hidden" value={ employee.id }/>
+
+        <label className="fs15">First name:</label>
+        <input name="firstName" type="text" placeholder="First name" defaultValue={ employee.firstName }/>
+
+        <label className="fs15">Last name:</label>
+        <input name="lastName" type="text" placeholder="Last name" defaultValue={ employee.lastName }/>
+
+        <label className="fs15">Email:</label>
+        <input name="email" type="email" placeholder="Email" defaultValue={ employee.email }/>
+
+        <label className="fs15">Phone</label>
+        <input name="phone" type="text" placeholder="Phone" defaultValue={ employee.phone }/>
+
+        <label className="fs15">Position:</label>
+        <input name="position" type="text" placeholder="position" defaultValue={ employee.position }/>
+
+        <label className="fs15">Move to:</label>
+        <input name="refChiefId" type="number" placeholder="Chief id" defaultValue={ employee.refChiefId }/>
+
         <button type="submit">Save</button>
-      </form>
-    </div>
-  );
+        <button onClick={(e) => _closeWindow(e)}>Cancel</button>
+      </div>
+    </form>
+  )
+    ;
 }
 
-function ToolBox({children, employee}) {
+function ToolBox({ children, employee }) {
 
   const [showEditWindow, setShowEditWindow] = useState(false);
   const [isVisible, setIsVisible] = useState(false);
 
+  function deleteEmployee(id) {
+    axiosClient.delete('/delete/?id=' + id)
+      .then(response => {
+        window.location.reload();
+      })
+      .catch(error => {
+        console.error(error.message);
+      })
+  }
+
+  function closeToolBox() {
+    setIsVisible(false);
+    setShowEditWindow(false);
+  }
+
   return (
     <div
       className="toolbox"
-      onMouseEnter={() => setIsVisible(true)}
-      onMouseLeave={() => setIsVisible(false)}
+      onMouseOver={() => setIsVisible(true)}
+      onMouseLeave={() => closeToolBox()}
     >
       {children}
       {isVisible && <div className="tooltip">
-        <span className="tooltip-button" onClick={() => setShowEditWindow(true)}><TbUserEdit/></span>
-        <span className="tooltip-button" onClick={() => alert('Delete')}><TbUserMinus/></span>
-        {showEditWindow && <EditWindow employee={ employee }/>}
+        <span className="tooltip-button" onClick={() => {
+          setShowEditWindow(true);
+        }}><TbUserEdit/></span>
+        <span className="tooltip-button" onClick={() => {
+          deleteEmployee(employee.id);
+          setIsVisible(false);
+        }}><TbUserMinus/></span>
+        {showEditWindow && <EditWindow employee={ employee } closeWindow={ closeToolBox }/>}
       </div>}
     </div>
   );
@@ -72,13 +114,7 @@ function Employee(employee) {
 
   return (
     <ToolBox employee={ employee }>
-      <div
-        className="indent-10"
-        onMouseOver={(event) => {
-
-        }}
-
-      >
+      <div className="indent-10">
         <button
           onClick={(event) => {
             setIsOpened(!isOpened);
@@ -90,7 +126,7 @@ function Employee(employee) {
         <span>position: {position} <TbPhone/> {phone} <TbMail/> {email}</span>
         <div className={` ${!isOpened ? "" : "closed "}`}>
           {subordinates && subordinates.length > 0 && subordinates.map((el) =>
-            <Employee key={el.id} {...el} handleClick={employee.handleClick}/>
+            <Employee key={ el.id } { ...el } handleClick={ employee.handleClick }/>
           )}
         </div>
       </div>
@@ -131,7 +167,7 @@ export default function EmployeeTree() {
 
   return (
     <div className="tree-wrapper">
-      {data && data.map(el => <Employee key={el.id} {...el} handleClick={handleClick}/>)}
+      {data && data.map(el => <Employee key={el.id} {...el} handleClick={ handleClick }/>)}
     </div>
   );
 }

@@ -32,8 +32,16 @@ button {
 }
 
 .edit-window {
+  display: grid;
+  grid-template-columns: 100px 100px;
+  grid-gap: 10px;
   background: #edf2f7;
   padding: 10px;
   border-radius: 5px;
   position: absolute;
+}
+
+.fs15 {
+  color: #4a5568;
+  font-size: 15px;
 }

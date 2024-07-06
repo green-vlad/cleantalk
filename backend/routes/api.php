@@ -11,3 +11,4 @@ Route::get('/user', function (Request $request) {
 
 Route::get('/', [EmployeeController::class, 'index'])->middleware(ApiCors::class);
 Route::post('/save', [EmployeeController::class, 'save'])->middleware(ApiCors::class);
+Route::delete('/delete', [EmployeeController::class, 'delete'])->middleware(ApiCors::class);

@@ -15,7 +15,10 @@ return new class extends Migration
             $table->id();
             $table->timestamps();
             $table->bigInteger('ref_chief_id')->unsigned()->nullable();
-            $table->foreign('ref_chief_id')->references('id')->on('employees');
+            $table->foreign('ref_chief_id')
+                ->references('id')
+                ->on('employees')
+                ->onDelete('cascade');
             $table->string('first_name', 100);
             $table->string('last_name', 100);
             $table->string('position', 100)->nullable();

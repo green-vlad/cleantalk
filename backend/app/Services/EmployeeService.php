@@ -27,7 +27,7 @@ class EmployeeService
         /**
          * @var Employee $employee
         */
-        $employee = Employee::find($data['id'])->firstOrFail();
+        $employee = Employee::findOrFail($data['id']);
         if (!$employee) {
             throw new \Exception('Employee not found');
         }
@@ -36,6 +36,16 @@ class EmployeeService
         $employee->setAttribute('position', $data['position']);
         $employee->setAttribute('email', $data['email']);
         $employee->setAttribute('phone', $data['phone']);
+        $employee->setAttribute('ref_chief_id', $data['refChiefId']);
         $employee->save();
+    }
+
+    public function delete(int $id): void
+    {
+        /**
+         * @var Employee $employee
+         */
+        $employee = Employee::findOrFail($id);
+        $employee->delete();
     }
 }

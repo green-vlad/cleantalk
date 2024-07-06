@@ -31,6 +31,7 @@ class EmployeeController extends Controller
     {
         $data = $request->validate([
             'id' => 'required|integer|exists:employees,id',
+            'refChiefId' => 'integer|nullable|exists:employees,id',
             'firstName' => 'required|string',
             'lastName' => 'required|string',
             'position' => 'required|string',
@@ -38,6 +39,15 @@ class EmployeeController extends Controller
             'phone' => 'required|string',
         ]);
         $this->employeeService->save($data);
+        return response()->json('', 204);
+    }
+
+    public function delete(Request $request): JsonResponse
+    {
+        $data = $request->validate([
+            'id' => 'required|integer|exists:employees,id',
+        ]);
+        $this->employeeService->delete($data['id']);
         return response()->json('', 204);
     }
 }
