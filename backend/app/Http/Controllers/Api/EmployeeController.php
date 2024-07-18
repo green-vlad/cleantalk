@@ -39,7 +39,7 @@ class EmployeeController extends Controller
             'phone' => 'required|string',
         ]);
         $this->employeeService->save($data);
-        return response()->json('', 204);
+        return response()->json('', 200);
     }
 
     public function delete(Request $request): JsonResponse
