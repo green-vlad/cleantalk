@@ -23,7 +23,7 @@ return [
 
     'allowed_origins_patterns' => [],
 
-    'allowed_headers' => ['*'],
+    'allowed_headers' => [':authority:', ':method:', ':path:', ':scheme:'],
 
     'exposed_headers' => [],
 
