@@ -15,14 +15,11 @@ class EmployeeController extends Controller
     {
 
     }
-    public function index(Request $request): JsonResponse
+    public function index(?int $id = null): JsonResponse
     {
-        $data = $request->validate([
-            'id' => 'integer|exists:employees,id',
-        ]);
         return response()->json(
             EmployeeResource::collection(
-                $this->employeeService->getEmployeeListByChief(count($data) > 0 ? $data['id'] : null)
+                $this->employeeService->getEmployeeListByChief($id)
             )
         );
     }
@@ -42,12 +39,9 @@ class EmployeeController extends Controller
         return response()->json('', 200);
     }
 
-    public function delete(Request $request): JsonResponse
+    public function delete(int $id): JsonResponse
     {
-        $data = $request->validate([
-            'id' => 'required|integer|exists:employees,id',
-        ]);
-        $this->employeeService->delete($data['id']);
+        $this->employeeService->delete($id);
         return response()->json('', 204);
     }
 }
